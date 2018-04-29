@@ -1,7 +1,7 @@
 package kohonen;
 
 import image.CompressedFrame;
-import image.Pattern;
+import image.PixelFrame;
 import utils.Utils;
 
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ public class KohonenNetwork {
         }
     }
 
-    public void processPattern(Pattern pattern) {
-        int winningNeuronIndex = this.findWinningNeuronIndex(pattern.getPixels());
-        this.modifyNeuronWeights(winningNeuronIndex, pattern.getPixels());
+    public void processPixelFrame(PixelFrame pixelFrame) {
+        int winningNeuronIndex = this.findWinningNeuronIndex(pixelFrame.getPixels());
+        this.modifyNeuronWeights(winningNeuronIndex, pixelFrame.getPixels());
     }
 
     private int findWinningNeuronIndex(double[] pixels) {
@@ -51,7 +51,7 @@ public class KohonenNetwork {
     }
 
     public CompressedFrame[][] compressImage(int[][] image, int frameWidthHeight) {
-        Pattern[][] patterns = new Pattern[image.length / frameWidthHeight][image[0].length / frameWidthHeight];
+        PixelFrame[][] pixelFrames = new PixelFrame[image.length / frameWidthHeight][image[0].length / frameWidthHeight];
         int x = 0, y, z;
         for(int i = 0; i < image.length; i+=frameWidthHeight) {
             y=0;
@@ -64,22 +64,22 @@ public class KohonenNetwork {
                         z++;
                     }
                 }
-                patterns[x][y] = new Pattern(Utils.normalizeVector(pixels), Utils.calculateSqrtSum(pixels));
+                pixelFrames[x][y] = new PixelFrame(Utils.normalizeVector(pixels), Utils.calculateSqrtSum(pixels));
                 y++;
             }
             x++;
         }
 
 
-        return this.convertPatternsToCompressedFrames(patterns);
+        return this.convertPixelFramesToCompressedFrames(pixelFrames);
     }
 
-    private CompressedFrame[][] convertPatternsToCompressedFrames(Pattern[][] patterns) {
-        CompressedFrame[][] compressedFrames = new CompressedFrame[patterns.length][patterns[0].length];
-        for(int i = 0; i < patterns.length; i++) {
-            for(int j = 0; j < patterns[0].length; j++) {
-                int winningNeuronIndex = this.findWinningNeuronIndex(patterns[i][j].getPixels());
-                compressedFrames[i][j] = new CompressedFrame(winningNeuronIndex, patterns[i][j].getBrightness());
+    private CompressedFrame[][] convertPixelFramesToCompressedFrames(PixelFrame[][] pixelFrames) {
+        CompressedFrame[][] compressedFrames = new CompressedFrame[pixelFrames.length][pixelFrames[0].length];
+        for(int i = 0; i < pixelFrames.length; i++) {
+            for(int j = 0; j < pixelFrames[0].length; j++) {
+                int winningNeuronIndex = this.findWinningNeuronIndex(pixelFrames[i][j].getPixels());
+                compressedFrames[i][j] = new CompressedFrame(winningNeuronIndex, pixelFrames[i][j].getBrightness());
             }
         }
         return compressedFrames;

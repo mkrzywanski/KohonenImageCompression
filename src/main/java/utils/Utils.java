@@ -1,6 +1,6 @@
 package utils;
 
-import image.Pattern;
+import image.PixelFrame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class Utils {
         return Math.sqrt(sum);
     }
 
-    public static Pattern generateRandomPattern(int[][] image, int frameWidthHeight) {
+    public static PixelFrame generateRandomPattern(int[][] image, int frameWidthHeight) {
         int firstRowNumber = new Random().nextInt(image.length - frameWidthHeight);
         int firstColumnNumber = new Random().nextInt(image[0].length - frameWidthHeight);
 
@@ -41,7 +41,7 @@ public class Utils {
             }
         }
         vector = Utils.normalizeVector(vector);
-        return new Pattern(vector);
+        return new PixelFrame(vector);
     }
 
     public static double[] generateRandomWeights(int weightsCount) {
@@ -83,12 +83,12 @@ public class Utils {
         return maxIndex;
     }
 
-    public static List<Pattern> generatePatternsList(int[][] image, int patternsCount, int frameWidthHeight) {
-        List<Pattern> patterns = new ArrayList<>();
+    public static List<PixelFrame> generatePatternsList(int[][] image, int patternsCount, int frameWidthHeight) {
+        List<PixelFrame> pixelFrames = new ArrayList<>();
         for(int i = 0; i < patternsCount; i++) {
-            patterns.add(generateRandomPattern(image,frameWidthHeight));
+            pixelFrames.add(generateRandomPattern(image,frameWidthHeight));
         }
-        return patterns;
+        return pixelFrames;
     }
 
     public static int[] denormalizeVector(double[] vector, double value) {

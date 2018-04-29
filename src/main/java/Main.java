@@ -1,7 +1,7 @@
 import config.Configuration;
 import image.CompressedFrame;
 import image.ImageLoader;
-import image.Pattern;
+import image.PixelFrame;
 import kohonen.KohonenNetwork;
 import utils.Utils;
 
@@ -20,15 +20,15 @@ public class Main {
                 Configuration.MINIMAL_WINNER_COUNTER
         );
 
-        List<Pattern> patterns = Utils.generatePatternsList(
+        List<PixelFrame> pixelFrames = Utils.generatePatternsList(
                 image,
                 Configuration.PATTERNS_COUNT,
                 Configuration.FRAME_WIDTH_HEIGHT
         );
 
         for(int i = 0; i < Configuration.AGES_COUNT; i++) {
-            for(int j = 0; j < patterns.size(); j++) {
-                kohonenNetwork.processPattern(patterns.get(j));
+            for(int j = 0; j < pixelFrames.size(); j++) {
+                kohonenNetwork.processPixelFrame(pixelFrames.get(j));
             }
         }
 
@@ -37,7 +37,7 @@ public class Main {
         CompressedFrame[][] compressedFrames = kohonenNetwork.compressImage(image, Configuration.FRAME_WIDTH_HEIGHT);
         int[][] decompressedImage = kohonenNetwork.decompressImage(compressedFrames, Configuration.FRAME_WIDTH_HEIGHT);
 
-        imageLoader.saveImageToFile(decompressedImage, "decompressed.jpg", Configuration.imageWidthHeight);
+        imageLoader.saveImageToFile(decompressedImage, "decompressedImage.jpg", Configuration.imageWidthHeight);
         imageLoader.saveImageToFile(image, "originalImage.jpg", Configuration.imageWidthHeight);
 
         double compressionRate = kohonenNetwork.calculateCompressionRate(

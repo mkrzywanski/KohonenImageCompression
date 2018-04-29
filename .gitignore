@@ -25,3 +25,6 @@ originalImage.jpg
 decompressedImage.jpg
 
 target/
+
+.idea/
+*.iml
