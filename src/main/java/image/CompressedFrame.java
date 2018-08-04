@@ -1,20 +1,20 @@
 package image;
 
 public class CompressedFrame {
-    private int neuronNumber;
+    private int winningNeuronIndex;
     private double brightness;
 
-    public CompressedFrame(int neuronNumber, double brightness) {
-        this.neuronNumber = neuronNumber;
+    public CompressedFrame(int winningNeuronIndex, double brightness) {
+        this.winningNeuronIndex = winningNeuronIndex;
         this.brightness = brightness;
     }
 
-    public int getNeuronNumber() {
-        return neuronNumber;
+    public int getWinningNeuronIndex() {
+        return winningNeuronIndex;
     }
 
-    public void setNeuronNumber(int neuronNumber) {
-        this.neuronNumber = neuronNumber;
+    public void setWinningNeuronIndex(int winningNeuronIndex) {
+        this.winningNeuronIndex = winningNeuronIndex;
     }
 
     public double getBrightness() {

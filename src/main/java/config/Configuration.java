@@ -12,7 +12,7 @@ public class Configuration {
     public static final Integer FRAME_WIDTH_HEIGHT = 8;
     public static final Double TRAINING_STEP = 0.01;
     public static final Integer MINIMAL_WINNER_COUNTER = 1;
-    public static final Integer imageWidthHeight = 512;
+    public static final Integer IMAGE_WIDTH_HEIGHT = 512;
     public static final Integer BITS_PER_WEIGHT = 8;
 
 }

@@ -3,6 +3,7 @@ package utils;
 import image.PixelFrame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -20,10 +21,7 @@ public class Utils {
     }
 
     public static double calculateSqrtSum(double[] vector) {
-        double sum = 0;
-        for(int i = 0; i < vector.length; i++) {
-            sum += Math.pow(vector[i],2);
-        }
+        double sum = Arrays.stream(vector).map(value -> Math.pow(value,2)).sum();
         return Math.sqrt(sum);
     }
 
@@ -53,7 +51,7 @@ public class Utils {
         return weights;
     }
 
-    public static int minIndex(List<Double> list) {
+    public static int findMinValueIndex(List<Double> list) {
         Integer i=0;
         Double min = null;
         int minIndex=-1;
@@ -69,7 +67,7 @@ public class Utils {
         return minIndex;
     }
 
-    public static int maxIndex(List<Double> list) {
+    public static int findMaxValueIndex(List<Double> list) {
         Integer i=0;
         Double max = null;
         int maxIndex=-1;

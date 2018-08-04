@@ -37,11 +37,11 @@ public class Main {
         CompressedFrame[][] compressedFrames = kohonenNetwork.compressImage(image, Configuration.FRAME_WIDTH_HEIGHT);
         int[][] decompressedImage = kohonenNetwork.decompressImage(compressedFrames, Configuration.FRAME_WIDTH_HEIGHT);
 
-        imageLoader.saveImageToFile(decompressedImage, "decompressedImage.jpg", Configuration.imageWidthHeight);
-        imageLoader.saveImageToFile(image, "originalImage.jpg", Configuration.imageWidthHeight);
+        imageLoader.saveImageToFile(decompressedImage, "decompressedImage.jpg", Configuration.IMAGE_WIDTH_HEIGHT);
+        imageLoader.saveImageToFile(image, "originalImage.jpg", Configuration.IMAGE_WIDTH_HEIGHT);
 
         double compressionRate = kohonenNetwork.calculateCompressionRate(
-                Configuration.imageWidthHeight,
+                Configuration.IMAGE_WIDTH_HEIGHT,
                 Configuration.FRAME_WIDTH_HEIGHT,
                 compressedFrames,
                 Configuration.BITS_PER_WEIGHT
