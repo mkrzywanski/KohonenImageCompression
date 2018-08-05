@@ -3,6 +3,9 @@ import image.CompressedFrame;
 import image.ImageLoader;
 import image.PixelFrame;
 import kohonen.KohonenNetwork;
+import kohonen.KohonenNetworkCompressor;
+import kohonen.KohonenNetworkDecompressor;
+import kohonen.evaluator.KohonenNetworkEvaluator;
 import utils.Utils;
 
 import java.io.IOException;
@@ -34,21 +37,27 @@ public class Main {
 
         kohonenNetwork.deleteDeadNeurons();
 
-        CompressedFrame[][] compressedFrames = kohonenNetwork.compressImage(image, Configuration.FRAME_WIDTH_HEIGHT);
-        int[][] decompressedImage = kohonenNetwork.decompressImage(compressedFrames, Configuration.FRAME_WIDTH_HEIGHT);
+        KohonenNetworkCompressor kohonenNetworkCompressor = new KohonenNetworkCompressor(kohonenNetwork);
+        CompressedFrame[][] compressedFrames = kohonenNetworkCompressor.compressImage(image, Configuration.FRAME_WIDTH_HEIGHT);
+
+        KohonenNetworkDecompressor kohonenNetworkDecompressor = new KohonenNetworkDecompressor(kohonenNetwork);
+        int[][] decompressedImage = kohonenNetworkDecompressor.decompressImage(compressedFrames, Configuration.FRAME_WIDTH_HEIGHT);
 
         imageLoader.saveImageToFile(decompressedImage, "decompressedImage.jpg", Configuration.IMAGE_WIDTH_HEIGHT);
         imageLoader.saveImageToFile(image, "originalImage.jpg", Configuration.IMAGE_WIDTH_HEIGHT);
 
-        double compressionRate = kohonenNetwork.calculateCompressionRate(
+        KohonenNetworkEvaluator kohonenNetworkEvaluator = new KohonenNetworkEvaluator();
+
+        double compressionRate = kohonenNetworkEvaluator.calculateCompressionRate(
                 Configuration.IMAGE_WIDTH_HEIGHT,
                 Configuration.FRAME_WIDTH_HEIGHT,
                 compressedFrames,
-                Configuration.BITS_PER_WEIGHT
+                Configuration.BITS_PER_WEIGHT,
+                Configuration.NEURONS_NUMBER
         );
         System.out.println("Compression rate = " + compressionRate);
 
-        double psnr = kohonenNetwork.calculatePSNR(image, decompressedImage);
+        double psnr = kohonenNetworkEvaluator.calculatePSNR(image, decompressedImage);
         System.out.println("PSNR = " + psnr);
 
     }
