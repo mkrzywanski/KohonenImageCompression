@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageLoader {
-    public int[][] loadImage(String fileName) throws IOException{
+    public int[][] loadImage(String fileName) throws IOException {
         File file = new File(fileName);
         BufferedImage img = ImageIO.read(file);
         int width = img.getWidth();

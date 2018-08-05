@@ -12,26 +12,26 @@ import java.io.IOException;
 import java.util.List;
 
 public class Main {
-    public static void main(String... args) throws IOException{
+    public static void main(String... args) throws IOException {
         ImageLoader imageLoader = new ImageLoader();
         int[][] image = imageLoader.loadImage(Configuration.FILE_NAME);
 
         KohonenNetwork kohonenNetwork = new KohonenNetwork(
                 Configuration.NEURONS_NUMBER,
-                (int)Math.pow(Configuration.FRAME_WIDTH_HEIGHT, 2),
+                (int) Math.pow(Configuration.FRAME_WIDTH_HEIGHT, 2),
                 Configuration.TRAINING_STEP,
                 Configuration.MINIMAL_WINNER_COUNTER
         );
 
-        List<PixelFrame> pixelFrames = Utils.generatePatternsList(
+        List<PixelFrame> pixelFrames = PixelFrame.generatePixelFramesList(
                 image,
                 Configuration.PATTERNS_COUNT,
                 Configuration.FRAME_WIDTH_HEIGHT
         );
 
-        for(int i = 0; i < Configuration.AGES_COUNT; i++) {
-            for(int j = 0; j < pixelFrames.size(); j++) {
-                kohonenNetwork.processPixelFrame(pixelFrames.get(j));
+        for (int i = 0; i < Configuration.AGES_COUNT; i++) {
+            for (PixelFrame pixelFrame : pixelFrames) {
+                kohonenNetwork.processPixelFrame(pixelFrame);
             }
         }
 
