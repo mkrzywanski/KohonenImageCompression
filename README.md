@@ -1,4 +1,5 @@
 # KohonenImageCompression
+[![Build Status](https://travis-ci.org/sHiniz0r/KohonenImageCompression.svg?branch=master)](https://travis-ci.org/sHiniz0r/KohonenImageCompression)
 This project aims to compress square images using Kohonen neural network.
 ## Technolgies
 Application implemented using Java 8 and Maven dependency management.
