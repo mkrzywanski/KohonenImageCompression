@@ -15,7 +15,9 @@ Requirements :
 ## Examples
 Original Image :
 ![LenaOriginal](https://i.imgur.com/ysnLqp6.jpg)
+
 Compressed image with Compression rate = 20.07843137254902 and PSNR = 12.95185660017397
 ![LenaCompressed1](https://i.imgur.com/Swub3uS.jpg)
+
 Compressed image with Compression rate = 10.014669926650367 and PSNR = 19.622227898861464 :
 ![LenaCompressed2](https://i.imgur.com/itkq1HY.jpg)
