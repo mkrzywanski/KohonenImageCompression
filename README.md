@@ -13,7 +13,9 @@ Requirements :
 2. 	Compression rate - a factor given by original image's bits number divised by compressed image's bits number.
 
 ## Examples
+
 Original Image :
+
 ![LenaOriginal](https://i.imgur.com/ysnLqp6.jpg)
 
 Compressed image with Compression rate = 20.07843137254902 and PSNR = 12.95185660017397
