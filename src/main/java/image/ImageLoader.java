@@ -17,9 +17,9 @@ public class ImageLoader {
         int height = img.getHeight();
         int[][] imgArr = new int[width][height];
         Raster raster = img.getData();
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                imgArr[i][j] = raster.getSample(j, i, 0);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                imgArr[x][y] = raster.getSample(y, x, 0);
             }
         }
         return imgArr;

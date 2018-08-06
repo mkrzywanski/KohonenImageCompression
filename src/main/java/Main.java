@@ -1,12 +1,9 @@
 import config.Configuration;
-import image.CompressedFrame;
-import image.ImageLoader;
-import image.PixelFrame;
+import image.*;
 import kohonen.KohonenNetwork;
 import kohonen.KohonenNetworkCompressor;
 import kohonen.KohonenNetworkDecompressor;
 import kohonen.evaluator.KohonenNetworkEvaluator;
-import utils.Utils;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +11,7 @@ import java.util.List;
 public class Main {
     public static void main(String... args) throws IOException {
         ImageLoader imageLoader = new ImageLoader();
-        int[][] image = imageLoader.loadImage(Configuration.FILE_NAME);
+        int[][] originalImage = imageLoader.loadImage(Configuration.FILE_NAME);
 
         KohonenNetwork kohonenNetwork = new KohonenNetwork(
                 Configuration.NEURONS_NUMBER,
@@ -23,28 +20,31 @@ public class Main {
                 Configuration.MINIMAL_WINNER_COUNTER
         );
 
-        List<PixelFrame> pixelFrames = PixelFrame.generatePixelFramesList(
-                image,
-                Configuration.PATTERNS_COUNT,
-                Configuration.FRAME_WIDTH_HEIGHT
-        );
+        RandomPixelFrameGenerator randomPixelFrameGenerator = new RandomPixelFrameGenerator(originalImage,
+                Configuration.IMAGE_WIDTH_HEIGHT,
+                Configuration.FRAME_WIDTH_HEIGHT);
+
+        List<PixelFrame> randomPixelFramesList = randomPixelFrameGenerator.generatePixelFramesList(Configuration.PATTERNS_COUNT);
 
         for (int i = 0; i < Configuration.AGES_COUNT; i++) {
-            for (PixelFrame pixelFrame : pixelFrames) {
+            for (PixelFrame pixelFrame : randomPixelFramesList) {
                 kohonenNetwork.processPixelFrame(pixelFrame);
             }
         }
 
         kohonenNetwork.deleteDeadNeurons();
 
-        KohonenNetworkCompressor kohonenNetworkCompressor = new KohonenNetworkCompressor(kohonenNetwork);
-        CompressedFrame[][] compressedFrames = kohonenNetworkCompressor.compressImage(image, Configuration.FRAME_WIDTH_HEIGHT);
+        ImageConverter imageConverter = new ImageConverter(originalImage, Configuration.FRAME_WIDTH_HEIGHT, Configuration.IMAGE_WIDTH_HEIGHT);
+        PixelFrame[][] pixelFrames = imageConverter.convertImageToPixelFrames();
 
-        KohonenNetworkDecompressor kohonenNetworkDecompressor = new KohonenNetworkDecompressor(kohonenNetwork);
-        int[][] decompressedImage = kohonenNetworkDecompressor.decompressImage(compressedFrames, Configuration.FRAME_WIDTH_HEIGHT);
+        KohonenNetworkCompressor kohonenNetworkCompressor = new KohonenNetworkCompressor(kohonenNetwork);
+        CompressedFrame[][] compressedFrames = kohonenNetworkCompressor.compress(pixelFrames);
+
+        KohonenNetworkDecompressor kohonenNetworkDecompressor = new KohonenNetworkDecompressor(kohonenNetwork, compressedFrames, Configuration.FRAME_WIDTH_HEIGHT);
+        int[][] decompressedImage = kohonenNetworkDecompressor.decompressImage();
 
         imageLoader.saveImageToFile(decompressedImage, "decompressedImage.jpg", Configuration.IMAGE_WIDTH_HEIGHT);
-        imageLoader.saveImageToFile(image, "originalImage.jpg", Configuration.IMAGE_WIDTH_HEIGHT);
+        imageLoader.saveImageToFile(originalImage, "originalImage.jpg", Configuration.IMAGE_WIDTH_HEIGHT);
 
         KohonenNetworkEvaluator kohonenNetworkEvaluator = new KohonenNetworkEvaluator();
 
@@ -57,7 +57,7 @@ public class Main {
         );
         System.out.println("Compression rate = " + compressionRate);
 
-        double psnr = kohonenNetworkEvaluator.calculatePSNR(image, decompressedImage);
+        double psnr = kohonenNetworkEvaluator.calculatePSNR(originalImage, decompressedImage);
         System.out.println("PSNR = " + psnr);
 
     }

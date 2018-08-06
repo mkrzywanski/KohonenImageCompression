@@ -5,38 +5,48 @@ import utils.Utils;
 
 public class KohonenNetworkDecompressor {
     private KohonenNetwork kohonenNetwork;
+    private int frameWidthHeight;
+    private int[][] decompressedImage;
+    private CompressedFrame[][] compressedFrames;
 
-    public KohonenNetworkDecompressor(KohonenNetwork kohonenNetwork) {
+    public KohonenNetworkDecompressor(KohonenNetwork kohonenNetwork, CompressedFrame[][] compressedFrames, int frameWidthHeight) {
         this.kohonenNetwork = kohonenNetwork;
+        this.frameWidthHeight = frameWidthHeight;
+        this.compressedFrames = compressedFrames;
+        this.decompressedImage = new int[compressedFrames.length * frameWidthHeight][compressedFrames[0].length * frameWidthHeight];
     }
 
-    public int[][] decompressImage(CompressedFrame[][] compressedFrames, int frameWidthHeight) {
-        int[][] decompressedImage = new int[compressedFrames.length * frameWidthHeight][compressedFrames[0].length * frameWidthHeight];
-        int imageXPixelPosition = 0, imageYPixelPosition;
+    public int[][] decompressImage() {
+        int imageStartPixelPositionX = 0, imageStartPixelPositionY;
+        for (int compressedFramePositionX = 0; compressedFramePositionX < this.compressedFrames.length; compressedFramePositionX++) {
+            imageStartPixelPositionY = 0;
 
-        for (int i = 0; i < compressedFrames.length; i++) {
-            imageYPixelPosition = 0;
+            for (int compressedFramePositionY = 0; compressedFramePositionY < this.compressedFrames[0].length; compressedFramePositionY++) {
 
-            for (int j = 0; j < compressedFrames[0].length; j++) {
-
-                CompressedFrame compressedFrame = compressedFrames[i][j];
+                CompressedFrame compressedFrame = this.compressedFrames[compressedFramePositionX][compressedFramePositionY];
                 int winningNeuronIndex = compressedFrame.getWinningNeuronIndex();
-                double[] pixels = kohonenNetwork.getNeuronWeights(winningNeuronIndex);
+                double[] pixels = this.kohonenNetwork.getNeuronWeights(winningNeuronIndex);
                 int[] denormalizedPixels = Utils.denormalizeVector(pixels, compressedFrame.getBrightness());
 
-                for (int k = imageXPixelPosition; k < imageXPixelPosition + frameWidthHeight; k++) {
-                    int denormalizedPixelsVectorIndex = 0;
+                this.savePixelsToImage(denormalizedPixels, imageStartPixelPositionX, imageStartPixelPositionY);
 
-                    for (int l = imageYPixelPosition; l < imageYPixelPosition + frameWidthHeight; l++) {
-                        decompressedImage[k][l] = denormalizedPixels[denormalizedPixelsVectorIndex];
-                        denormalizedPixelsVectorIndex++;
-                    }
-
-                }
-                imageYPixelPosition += frameWidthHeight;
+                imageStartPixelPositionY += this.frameWidthHeight;
             }
-            imageXPixelPosition += frameWidthHeight;
+            imageStartPixelPositionX += this.frameWidthHeight;
         }
-        return decompressedImage;
+        return this.decompressedImage.clone();
+    }
+
+    private void savePixelsToImage(int[] denormalizedPixels, int imageStartPixelPositionX, int imageStartPixelPositionY) {
+        for (int imagePixelPositionX = imageStartPixelPositionX; imagePixelPositionX < imageStartPixelPositionX + frameWidthHeight; imagePixelPositionX++) {
+            int denormalizedPixelsVectorIndex = 0;
+
+            for (int imagePixelPositionY = imageStartPixelPositionY; imagePixelPositionY < imageStartPixelPositionY + frameWidthHeight; imagePixelPositionY++) {
+                int pixelValue = denormalizedPixels[denormalizedPixelsVectorIndex];
+                decompressedImage[imagePixelPositionX][imagePixelPositionY] = pixelValue;
+                denormalizedPixelsVectorIndex++;
+            }
+
+        }
     }
 }

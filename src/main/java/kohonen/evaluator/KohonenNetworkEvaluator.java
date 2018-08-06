@@ -11,10 +11,10 @@ public class KohonenNetworkEvaluator {
     public double calculateCompressionRate(int imageWidthHeight, int frameWidthHeight,
                                            CompressedFrame[][] compressedFrames, int bitsPerWeight, int neuronsNumber) {
         double originalImageBitsNumber = Math.pow(imageWidthHeight, 2) * 8;
-        double compressedImageBits = Math.pow(frameWidthHeight, 2) * neuronsNumber * bitsPerWeight;
+        double compressedImageBitsNumber = Math.pow(frameWidthHeight, 2) * neuronsNumber * bitsPerWeight;
 
         int neuronIndexBitNumber = Utils.minimalNumberOfBits(neuronsNumber);
-        compressedImageBits += neuronIndexBitNumber * compressedFrames.length * compressedFrames.length;
+        compressedImageBitsNumber += neuronIndexBitNumber * compressedFrames.length * compressedFrames.length;
 
         double maxBrightnessValue = Arrays.stream(compressedFrames)
                 .flatMap(Arrays::stream)
@@ -23,9 +23,9 @@ public class KohonenNetworkEvaluator {
                 .getBrightness();
 
         int bitsNumberForBrightness = Utils.minimalNumberOfBits(maxBrightnessValue);
-        compressedImageBits += compressedFrames.length * compressedFrames.length * bitsNumberForBrightness;
+        compressedImageBitsNumber += compressedFrames.length * compressedFrames.length * bitsNumberForBrightness;
 
-        return originalImageBitsNumber / compressedImageBits;
+        return originalImageBitsNumber / compressedImageBitsNumber;
     }
 
     public double calculatePSNR(int[][] originalImage, int[][] decompressedImage) {
