@@ -8,16 +8,16 @@ public class Utils {
     public static double[] normalizeVector(double[] vector) {
         double[] normalizedVector = new double[vector.length];
 
-        double sumSqrt = calculateSqrtSum(vector);
+        double euclideanNorm = calculateEuclideanNorm(vector);
 
         for (int i = 0; i < normalizedVector.length; i++) {
-            normalizedVector[i] = vector[i] / sumSqrt;
+            normalizedVector[i] = vector[i] / euclideanNorm;
         }
 
         return normalizedVector;
     }
 
-    public static double calculateSqrtSum(double[] vector) {
+    public static double calculateEuclideanNorm(double[] vector) {
         double sum = Arrays.stream(vector).map(value -> Math.pow(value, 2)).sum();
         return Math.sqrt(sum);
     }

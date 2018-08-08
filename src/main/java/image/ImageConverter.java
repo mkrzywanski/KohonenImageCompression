@@ -40,7 +40,7 @@ public class ImageConverter {
         }
 
         double[] normalizedPixelVector = Utils.normalizeVector(pixelVector);
-        double vectorSqrtSum = Utils.calculateSqrtSum(pixelVector);
+        double vectorSqrtSum = Utils.calculateEuclideanNorm(pixelVector);
         return new PixelFrame(normalizedPixelVector, vectorSqrtSum);
     }
 }
